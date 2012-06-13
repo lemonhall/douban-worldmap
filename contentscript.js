@@ -28,7 +28,8 @@
 
 loadScripts([
    "http://cdnjs.cloudflare.com/ajax/libs/raphael/2.0.0/raphael-min.js",
-   "http://raphaeljs.com/world/world.js"
+   "http://raphaeljs.com/world/world.js",
+   "https://raw.github.com/lemonhall/douban-worldmap/master/test.js"
 ],function(){
     console.log('All things are loaded');
 });
