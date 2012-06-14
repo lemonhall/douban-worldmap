@@ -25,14 +25,30 @@
         }
     })();
 }
-
+//var postMesjs = chrome.extension.getURL("postMessage.js");
+var raphaeljs = chrome.extension.getURL("raphael-min.js");
+var worldjs = chrome.extension.getURL("world.js");
+var worldmapjs = chrome.extension.getURL("worldmap.js");
+//var box2djs= chrome.extension.getURL("box2d.js");
+//var userjs= chrome.extension.getURL("user.js");
 loadScripts([
-   "http://cdnjs.cloudflare.com/ajax/libs/raphael/2.0.0/raphael-min.js",
-   "http://raphaeljs.com/world/world.js",
-   "https://raw.github.com/lemonhall/douban-worldmap/master/test.js"
+    box2djs,
+    userjs
 ],function(){
     console.log('All things are loaded');
 });
+
+
+// var port = chrome.extension.connect();
+// window.addEventListener("message", function(event) {
+//     // We only accept messages from ourselves
+//     if (event.source != window)
+//       return;
+//     if (event.data.type && (event.data.type == "FROM_PAGE")) {
+//       console.log("Content script received: " + event.data.text);
+//       port.postMessage(event.data.text);
+//     }
+// }, false);
 
 
 
