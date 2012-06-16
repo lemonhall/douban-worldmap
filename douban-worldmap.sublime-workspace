@@ -133,12 +133,31 @@
 			}
 		},
 		{
-			"file": "box2d.js",
+			"file": "audio-visualizer.html",
 			"settings":
 			{
-				"buffer_size": 176293,
+				"buffer_size": 23285,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "beatdetektor.js",
+			"settings":
+			{
+				"buffer_size": 23810,
 				"line_ending": "Windows",
-				"name": "/* Based on Alex Arnell's inheritance implementati"
+				"name": "/*"
+			}
+		},
+		{
+			"contents": "\n<!DOCTYPE html>\n<!--\nCopyright 2011 Google Inc.\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n     http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\nAuthor: Eric Bidelman (ericbidelman@chromium.org)\n-->\n<html>\n<head>\n<meta charset=\"utf-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"chrome=1\">\n<title>Chrome Audio Visualizer</title>\n<style>\nhtml, body {\n  height: 100%;\n  overflow-y: hidden;\n}\nbody {\n  color: #333;\n  font: 10pt 'Droid Sans', Arial;\n  /*background: -webkit-radial-gradient(center center, #fff, #bbb) no-repeat;*/\n  display: -webkit-box;\n  -webkit-box-align: center;\n  -webkit-box-pack: center;\n  box-sizing: border-box;\n}\n/*\n#svgcircle:hover circle {\n  fill: green !important;\n}\n#svgcircle {\n  width: 100px;\n  height: 100px;\n}*/\n.hidden {\n  display: none !important;\n}\n#main {\n  -webkit-perspective: 1000;\n  -webkit-transform-style: preserve-3d;\n  display: -webkit-box;\n  -webkit-box-align: center;\n  -webkit-box-orient: vertical;\n  box-sizing: border-box;\n}\n#main > section {\n  text-align: center;\n  background: -webkit-linear-gradient(top, #999, #333 10%, #333 40%, black 90%, black) no-repeat;\n  border-radius: 50px;\n  z-index: 100;\n  position: relative;\n  margin-top: 8em;\n  padding: 15px 0;\n  box-shadow: 1px 2px 5px rgba(0,0,0,0.5);\n}\ninput[type=\"range\"]{\n  -webkit-appearance: none !important;\n  background-color: #555;\n  box-shadow: 0 -1px 1px rgba(255,255,255,0.5) inset;\n  border-radius: 10px;\n}\n\ninput[type=\"range\"]::-webkit-slider-thumb {\n  -webkit-appearance: none !important;\n  width: 20px;\n  height: 8px;\n  box-shadow: 1px 1px 5px rgba(0,0,0,1);\n  cursor: pointer;\n  border-top: 1px solid #fff;\n  background: #ccc -webkit-linear-gradient(top, rgb(240, 240, 240), rgb(210, 210, 210));\n}\n#fft {\n  /*background: -webkit-linear-gradient(top, #fff, #ddd);*/\n  /*border-radius: 20px;\n  border: 2px solid #eee;*/\n  background: -webkit-linear-gradient(top, white 80%, #ddd) no-repeat;\n  -webkit-mask-image: url(circle2.svg);\n  -webkit-mask-position: 50% 100%;\n  -webkit-mask-size: 75% 100%;\n  -webkit-mask-repeat: no-repeat;\n  /*-webkit-mask-box-image: url(mask.png) 0 stretch;*/\n\n  -webkit-transition: all 2s ease-in-out;\n}\n#fft.open {\n  -webkit-mask-size: 150% 125%;\n}\n.reflect {\n  -webkit-box-reflect: below 10px -webkit-linear-gradient(top, transparent, transparent 70%, white);\n}\n#fft.html5-logo {\n  -webkit-mask-image: url(HTML5_Badge2.svg);\n  -webkit-mask-position: 50% 50%;\n  -webkit-mask-size: 100% 100%;\n /* background: -webkit-linear-gradient(top, white, rgba(239, 101, 42, 0.1)) no-repeat;*/\n  background: rgba(239, 101, 42, 0.1);\n  -webkit-transition: none;\n}\n@-webkit-keyframes rotate {\n  /*0% {\n    -webkit-transform: translate3d(0, 0, 0) rotate3d(0,0,0,0deg);\n  }\n  25% {\n    -webkit-transform: translate3d(-100px, 0, 0) rotate3d(0,1,0,-180deg);\n  }\n  50% {\n    -webkit-transform: translate3d(0, 0, 0) rotate3d(0,0,0,0);\n  }\n  75% {\n    -webkit-transform: translate3d(100px, 0, 0) rotate3d(0,1,0,180deg);\n  }\n  100% {\n    -webkit-transform: translate3d(0, 0, 0) rotate3d(0,0,0,0deg);\n  }*/\n  from {\n    -webkit-transform: rotateY(0deg);\n  }\n  to {\n    -webkit-transform: rotateY(360deg);\n  }\n}\n#fft.html5-logo.animate {\n  -webkit-animation-name: rotate;\n  -webkit-animation-duration: 10s;\n  -webkit-animation-timing-function: ease-in-out;\n  -webkit-transform-origin: 50% 50%;\n  -webkit-animation-iteration-count: infinite;\n  /*-webkit-animation-direction: alternate;*/\n}\nbutton, .button:before {\n  outline: none;\n  white-space: nowrap;\n  -webkit-user-select: none;\n  user-select: none;\n  cursor: pointer;\n  text-shadow: 1px 1px #fff;\n  font-size: 14pt;\n  color: black;\n  background: -webkit-linear-gradient(top, #F9F9F9 40%, #E3E3E3 70%);\n  border: 1px solid #999;\n  border-radius: 3px;\n  padding: 5px 8px;\n  margin: 0;\n  vertical-align: middle;\n}\nbutton:not([disabled]):active,\n.button:active:before {\n  background: -webkit-linear-gradient(top, #E3E3E3 40%, #F9F9F9 70%);\n}\nbutton[disabled],\n.button[disabled] {\n  color: #ccc;\n}\n.button {\n  height: 30px;\n  width: 76px;\n}\n.button::-webkit-file-upload-button,\n.button::-moz-file-upload-button {\n  visibility: hidden;\n}\n.button:before {\n  content: 'Load file';\n  display: inline-block;\n}\nbutton:not([disabled]):hover,\n.button:not([disabled]):hover:before {\n  border-color: #ffcc00;\n}\n#gain {\n  width: 58%;\n  margin: 10px 0 0 0;\n  display: inline-block;\n}\n#buttons, #meters {\n  display: inline-block;\n  vertical-align: middle;\n}\n#meters {\n  margin-left: 0.5em;\n}\n#meters span {\n  width: 15px;\n  display: inline-block;\n  font-weight: 700;\n}\n#meters meter {\n  /*-webkit-appearance: relevancy-level-indicator;*/\n  width: 100px;\n}\ndetails {\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  white-space: nowrap;\n  cursor: pointer;\n  z-index: 10;\n  background: rgba(255,255,255,0.5);\n  border-radius: 10px;\n  padding: 5px;\n  border: 1px solid #eee;\n}\ndetails span {\n  display: inline-block;\n  width: 90px;\n}\n\n.icon {\n  width: 250px;\n  height: 250px;\n  position: relative;\n  -webkit-perspective: 1500;\n}\n\n/* White circle in the middle */\n.icon:before {\n  content: '';\n\n  position: absolute;\n  left: 30%;\n  top: 30%;\n  width: 40%;\n  height: 40%;\n  z-index: -1;\n\n  background: rgb(240, 240, 240);\n  border-radius: 100%;\n}\n\n.icon div {\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n\n  background-size: 100%;\n  background-repeat: no-repeat;\n\n  -webkit-transition: -webkit-transform 100ms ease-in-out;\n}\n.red {\n  background-image: url(red_small.png);\n}\n.green {\n  background-image: url(green_small.png);\n}\n.yellow {\n  background-image: url(yellow_small.png);\n}\n.blue {\n  background-image: url(blue_small.png);\n  /*-webkit-transform: scale(0.5);*/\n}\n\n/* Animations */\n@-webkit-keyframes explode {\n  0% { -webkit-transform: scale(.5) translateZ(0); z-index: 100; }\n  15% { -webkit-transform: scale(.6) translateZ(100px); z-index: 200; }\n  80% { -webkit-transform: scale(.5) translateZ(0); z-index: 100; }\n  100% { -webkit-transform: scale(.5) translateZ(0); z-index: 100; }\n}\n\n@-webkit-keyframes spin {\n  0% { -webkit-transform: rotateZ(0); }\n  100% { -webkit-transform: rotateZ(360deg); }\n}\n\n.icon {\n  -webkit-animation-name: spin;\n  -webkit-animation-duration: 20s;\n  -webkit-animation-iteration-count: infinite;\n  -webkit-animation-timing-function: linear;\n}\n/*\n.yellow {\n  -webkit-animation-name: explode;\n  -webkit-animation-duration: 3s;\n  -webkit-animation-iteration-count: infinite;\n  -webkit-animation-timing-function: ease-out;\n  -webkit-animation-fill-mode: both;\n}\n.green {\n  -webkit-animation-name: explode;\n  -webkit-animation-duration: 3s;\n  -webkit-animation-delay: 1s;\n  -webkit-animation-iteration-count: infinite;\n  -webkit-animation-timing-function: ease-out;\n  -webkit-animation-fill-mode: both;\n}\n.red {\n  -webkit-animation-name: explode;\n  -webkit-animation-duration: 3s;\n  -webkit-animation-delay: 2s;\n  -webkit-animation-iteration-count: infinite;\n  -webkit-animation-timing-function: ease-out;\n  -webkit-animation-fill-mode: both;\n}*/\n\n.android {\n  position: relative;\n  -webkit-transform: scale(0.6);\n  -moz-transform: scale(0.6);\n  -o-transform: scale(0.6);\n  -webkit-transition: all 0.3s ease-in-out;\n}\n.android header {\n  position: relative;\n  width: 220px;\n  height: 291px;\n  background: #A4C639;\n  -webkit-border-radius: 145px 145px 35px 35px;\n  -moz-border-radius: 145px 145px 35px 35px;\n  border-radius: 145px 145px 35px 35px;\n  display: inline-block;\n}\n.android .antenna {\n  position: absolute;\n  z-index: -1;\n  width: 7px;\n  height: 45px;\n  left: 48px;\n  top: -27px;\n  background: #A4C639;\n  -webkit-border-radius: 25px;\n  -moz-border-radius: 25px;\n  border-radius: 25px;\n  -webkit-transform: rotate(-29deg);\n  -moz-transform: rotate(-29deg);\n  -o-transform: rotate(-29deg);\n}\n.android .antenna:nth-child(2) {\n  left: 165px;\n  -webkit-transform: rotate(30deg);\n  -moz-transform: rotate(30deg);\n  -o-transform: rotate(30deg);\n}\n.android .eye {\n  position: absolute;\n  background-color: white;\n  -webkit-border-radius: 10px;\n  -moz-border-radius: 10px;\n  border-radius: 10px;\n  width: 19px;\n  height: 19px;\n  top: 41px;\n  left: 51px;\n}\n.android .eye:nth-child(odd) {\n  left: 150px;\n}\n.android #neck {\n  position: absolute;\n  background: white;\n  height: 9px;\n  width: 100%;\n  top: 99px;\n}\n.android #body > div,\n.android footer > div {\n  position: absolute;\n  width: 50px;\n  height: 150px;\n  top: 103px;\n  left: -57px;\n  background: #A4C639;\n  -webkit-border-radius: 150px;\n  -moz-border-radius: 150px;\n  border-radius: 150px;\n}\n\n.android #body > div:nth-child(1) {\n  -webkit-transform-origin: right top;\n}\n.android #body > div:nth-child(2) {\n  left: 228px;\n  -webkit-transition: -webkit-transform 50ms ease-in-out;\n  -webkit-transform-origin: center top;\n}\n.android footer > div {\n  left: 45px;\n  top: 218px;\n}\n.android footer > div:nth-child(2) {\n  left: 126px;\n}\n.android .eyepatch {\n  position: absolute;\n  background-color: black;\n  width: 19px;\n  height: 19px;\n  top: 0px;\n  left: 51px;\n}\n</style>\n</head>\n<body>\n\n<div id=\"main\">\n  <canvas id=\"fft\" width=\"512\" height=\"250\"></canvas>\n  <div id=\"chrome-logo\" class=\"reflect hidden\">\n    <div class=\"icon\">\n      <div class=\"green\"></div>\n      <div class=\"yellow\"></div>\n      <div class=\"blue\"></div>\n      <div class=\"red\"></div>\n    </div>\n  </div>\n  <div class=\"android hidden\">\n    <header>\n      <div class=\"antenna\"></div><div class=\"antenna\"></div>\n      <div class=\"eypatch\"></div>\n      <div class=\"eye\" id=\"lefteye\"></div><div class=\"eye\" id=\"righteye\"></div>\n    </header>\n    <div id=\"neck\"></div>\n    <section id=\"body\"><div id=\"leftarm\"></div><div id=\"rightarm\"></div></section>\n    <footer><div id=\"leftfoot\"></div><div id=\"rightfoot\"></div></footer>\n  </div>\n  <section>\n    <div id=\"controls\">\n      <span id=\"buttons\">\n        <button onclick=\"runCmd(this)\" data-func=\"play\" disabled>start</button>\n        <button onclick=\"runCmd(this)\" data-func=\"stop\" disabled>stop</button>\n        <button onclick=\"transformer()\">next</button>\n      </span>\n      <input type=\"range\" min=\"0\" max=\"5\" value=\"1\" step=\"0.1\" id=\"gain\">\n    </div>\n  </section>\n</div>\n\n<!--\n<svg id=\"svgcircle\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n  <circle cx=\"50\" cy=\"50\" r=\"40\" stroke=\"black\" stroke-width=\"2\" fill=\"red\">\n</svg>\n-->\n\n<!--\n<span id=\"meters\">\n  <span>L:</span><meter class=\"left\" min=\"0\" high=\"0.7\" max=\"1\"></meter><br>\n  <span>R:</span><meter class=\"right\" min=\"0\" high=\"0.7\" max=\"1\"></meter>\n</span>\n-->\n\n<details>\n  <summary>Options</summary>\n  view port <input type=\"range\" min=\"0\" step=\"1\" id=\"viewport-offset\"><br>\n  playbackRate: <input type=\"range\" value=\"1.0\" min=\"0\" max=\"8.0\" id=\"playbackRate\"><br>\n  smoothing: <input type=\"range\" min=\"0\" max=\"0.95\" step=\"0.05\" value=\"0.95\" id=\"smoothing\"><br>\n  bar width: <input type=\"range\" min=\"3\" max=\"20\" value=\"10\" step=\"1\" id=\"col-width\"><br>\n  spacer width: <input type=\"range\" min=\"4\" max=\"21\" value=\"11\" step=\"1\" id=\"spacer-width\"><br>\n  time domain?: <input type=\"checkbox\" id=\"waveform\">\n</details>\n\n<script src=\"beatdetektor.js\"></script>\n<script>\nvar canvas = document.getElementById('fft');\nvar ctx = canvas.getContext('2d');\ncanvas.width = document.body.clientWidth / 1.4;\n\nconst CANVAS_HEIGHT = canvas.height;\nconst CANVAS_WIDTH = canvas.width;\n\n/*\nvar meterL = document.querySelector('meter.left');\nvar meterR = document.querySelector('meter.right');\n*/\n\nvar chromeLogo = document.querySelector('#chrome-logo');\nvar red = document.querySelector('#chrome-logo .red');\nvar yellow = document.querySelector('#chrome-logo .yellow');\nvar green = document.querySelector('#chrome-logo .green');\nvar blue = document.querySelector('#chrome-logo .blue');\n\nvar spacer = document.getElementById('spacer-width');\nvar barWidth = document.getElementById('col-width');\n\nvar android = document.querySelector('.android');\nvar leftArm = document.getElementById('leftarm');\nvar rightArm = document.getElementById('rightarm');\nvar leftFoot = document.getElementById('leftfoot');\nvar rightFoot = document.getElementById('rightfoot');\nvar antennas = document.querySelectorAll('.antenna');\nvar leftEye = document.getElementById('lefteye');\nvar rightEye = document.getElementById('righteye');\n\n/*\nwindow.addEventListener('keypress', function(e) {\n  if (e.keyCode == 32) { // space\n    e.preventDefault();\n    if (document.querySelector(\"[data-func='play']\").disabled) {\n      runCmd('stop');\n    } else {\n      runCmd('play');\n    }\n  }\n}, false);\n*/\n\nvar STAGES = [\n  function() {\n    android.classList.add('hidden');\n\n    ctx.fillStyle = 'black';\n    canvas.className = '';\n\n    spacer.value = 11;//barWidth.valueAsNumber + parseFloat(spacer.step);\n    var evt = document.createEvent('Event');\n    evt.initEvent('change', false, false);\n    spacer.dispatchEvent(evt);\n\n    barWidth.value = 10;\n    var evt2 = document.createEvent('Event');\n    evt2.initEvent('change', false, false);\n    barWidth.dispatchEvent(evt);\n  },\n  function() {\n    canvas.classList.add('open');\n    var transEnd = function(e) {\n      canvas.removeEventListener('webkitTransitionEnd', transEnd, false);\n      transitionsDone = true;\n\n      barWidth.value = parseFloat(barWidth.min);\n      var evt = document.createEvent('Event');\n      evt.initEvent('change', false, false);\n      barWidth.dispatchEvent(evt);\n\n      spacer.value = barWidth.valueAsNumber + parseFloat(barWidth.step);\n      var evt2 = document.createEvent('Event');\n      evt2.initEvent('change', false, false);\n      spacer.dispatchEvent(evt2);\n    };\n    canvas.addEventListener('webkitTransitionEnd', transEnd, false);\n  },\n  function() {\n    canvas.classList.remove('open');\n\n    ctx.fillStyle = '#ef652a';\n\n    canvas.classList.toggle('html5-logo');\n\n    barWidth.value = 5;\n    var evt = document.createEvent('Event');\n    evt.initEvent('change', false, false);\n    barWidth.dispatchEvent(evt);\n\n    spacer.value = 5;\n    var evt2 = document.createEvent('Event');\n    evt2.initEvent('change', false, false);\n    spacer.dispatchEvent(evt);\n  },\n  function() {\n    canvas.classList.add('animate');\n  },\n  function() {\n    canvas.classList.add('hidden');\n    chromeLogo.classList.remove('hidden');\n  },\n  function() {\n    chromeLogo.classList.add('hidden');\n    android.classList.remove('hidden');\n  }\n];\nvar stageIndex = 0;\nvar transitionsDone = false;\n\nfunction transformer() {\n  transitionsDone = false;\n  STAGES[++stageIndex % STAGES.length]();\n}\n\n\nfunction runCmd(el) {\n  if (typeof el == 'string') {\n    var func = el;\n  } else {\n    var func = el.dataset.func.toLowerCase();\n  }\n  sound[func]();\n  el.disabled = !el.disabled;\n  switch (func) {\n    case 'play':\n      document.querySelector(\"[data-func='stop']\").disabled = false;\n      break;\n    case 'stop':\n      document.querySelector(\"[data-func='play']\").disabled = false;\n      break;\n    default:\n      // noop\n  }\n}\n\nfunction Sound() {\n  const MIX_TO_MONO = false;\n  const NUM_SAMPLES = 2048;\n\n  var self_ = this;\n  var context_ = new (window.AudioContext || window.webkitAudioContext)();\n  var source_ = null;\n  var jsProcessor_ = null;\n  var analyser_ = null;\n  var viewTimeDomain_ = false;\n\n  var spacerWidth_ = spacer.valueAsNumber;\n  var colWidth_ = barWidth.valueAsNumber;\n\n  var viewportOffset_ = document.getElementById('viewport-offset');\n  viewportOffset_.max = Math.round((NUM_SAMPLES / 2) - CANVAS_WIDTH / 4);\n  viewportOffset_.value = Math.round(viewportOffset_.max / 4);\n\n  document.getElementById('waveform').addEventListener('change', function(e) {\n    viewTimeDomain_ = this.checked;\n  }, false);\n\n  document.getElementById('smoothing').addEventListener('change', function(e) {\n    analyser_.smoothingTimeConstant = this.valueAsNumber;\n  }, false);\n\n  barWidth.addEventListener('change', function(e) {\n    colWidth_ = this.valueAsNumber;\n  }, false);\n\n  spacer.addEventListener('change', function(e) {\n    spacerWidth_ = this.valueAsNumber;\n  }, false);\n\n  document.getElementById('gain').addEventListener('change', function(e) {\n    source_.gain.value = this.valueAsNumber;\n    //ctx.fillStyle = 'rgb(0,0,' + this.valueAsNumber + ')';\n  }, false);\n\n  document.getElementById('playbackRate').addEventListener('change', function(e) {\n    //console.log(this.valueAsNumber)\n    source_.playbackRate.value = this.valueAsNumber;\n  }, false);\n\n  /*document.getElementById('pitch').addEventListener('change', function(e) {\n    var r = Math.random();\n    var r1 = r1 = (r - 0.5) * 2.0;\n    var totalPitch = document.getElementById('pitch').value + r1 * pitchRandomization;\n    var pitchRate = Math.pow(2.0, totalPitch / 1200.0);\n console.log( source_.playbackRate, parseFloat(this.value), this.valueAsNumber)\n    source_.playbackRate.value = this.valueAsNumber;\n  }, false);*/\n\n  var ftimer = 0;\n  var bd = new BeatDetektor(75, 149);\n  var vu = new BeatDetektor.modules.vis.VU();\n  var portion = 0;\n  var colors = [red, yellow, green];\n\n  var processAudio_ = function(e) {\n\n    // Get left channel input. No need for output arrays. They're hooked up\n    // directly to the destination, and we're not doing any processing.\n    var inputArrayL = e.inputBuffer.getChannelData(0);\n\n    var freqByteData = new Uint8Array(analyser_.frequencyBinCount);\n\n    if (viewTimeDomain_) {\n      analyser_.getByteTimeDomainData(freqByteData);\n    } else {\n      analyser_.getByteFrequencyData(freqByteData);\n      //analyser_.fftSize = 2048;\n    }\n\n    // Process beat detection if Chrome logo is showing or android logo is showing.\n    var stage = stageIndex % STAGES.length;\n    if (stage == 4 || stage == 5) {\n      bd.process(context_.currentTime, inputArrayL);\n      ftimer += bd.last_update;\n      if (ftimer > 1.0 / 24.0) {\n        vu.process(bd, ftimer);\n        ftimer = 0;\n      }\n\n      if (vu.vu_levels.length) {\n        var z = vu.vu_levels[0];\n\n        if (stage == 4) {\n          colors[portion++ % colors.length].style.webkitTransform = 'scale(' +  (z + 1) + ')';\n        } else if (stage == 5) {\n          antennas[0].style.webkitTransform = 'rotate(-29deg) scale(' +  (z + 1) + ')';\n          antennas[1].style.webkitTransform = 'rotate(30deg) scale(' +  (z + 1) + ')';\n          leftEye.style.webkitTransform = 'scale(' +  (-z + 1) + ')';\n          rightEye.style.webkitTransform = 'scale(' +  (-z + 1) + ')';\n\n          if (context_.currentTime > 10.5) {\n            leftFoot.style.webkitTransform = 'rotateZ(' +  (z * 30) + 'deg)';\n            rightFoot.style.webkitTransform = 'rotateX(' +  (z * 70) + 'deg)';\n          }\n\n          if (source_.gain.value >= 3) {\n            rightArm.style.webkitTransform = 'translateY(' +  (-z * 125) + 'px) rotateX(180deg) rotateZ(10deg)';\n          } else {\n            rightArm.style.webkitTransform = 'none';\n          }\n        }\n      }\n    }\n\n    self_.renderFFT('canvas', freqByteData);\n/*\n    meterL.value = Math.abs(inputArrayL[0]);\n    meterR.value = Math.abs(inputArrayL[0]);\n*/\n  };\n\n  this.renderFFT = function(format, freqByteData) {\n    if (format == 'canvas') {\n      const SPACER_WIDTH = spacerWidth_;//colWidth_ + 1;\n      const numBars = Math.round(CANVAS_WIDTH / SPACER_WIDTH);\n\n      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);\n\n      freqByteData = freqByteData.subarray(viewportOffset_.valueAsNumber);\n\n      var colors = [\n        '#3369E8', // blue\n        '#D53225', // red\n        '#EEB211', // yellow\n        '#009939' // green\n      ];\n      // Draw rectangle for each frequency bin.\n      for (var i = 0; i < numBars /*freqByteData.length*/; ++i) {\n        var magnitude = freqByteData[i];\n        if ((stageIndex % STAGES.length == 1) && transitionsDone) {\n          var lingrad = ctx.createLinearGradient(0, CANVAS_HEIGHT, 0, CANVAS_HEIGHT - magnitude);\n          lingrad.addColorStop(0, '#fff');\n          lingrad.addColorStop(1, colors[i % colors.length]);\n          ctx.fillStyle = lingrad;\n        }\n\n        ctx.fillRect(i * SPACER_WIDTH, CANVAS_HEIGHT, colWidth_, -magnitude);\n      }\n    }\n  };\n\n  this.initAudio = function(arrayBuffer) {\n    if (source_) {\n      runCmd('stop');\n    }\n\n    source_ = context_.createBufferSource();\n    source_.looping = true;\n\n    // Use async decoder if it is available.\n    if (context_.decodeAudioData) {\n      context_.decodeAudioData(arrayBuffer, function(buffer) {\n        source_.buffer = buffer;\n      }, function(e) {\n        console.log(e);\n      });\n    } else {\n      source_.buffer = context_.createBuffer(arrayBuffer, MIX_TO_MONO /*mixToMono*/);\n    }\n\n    // This AudioNode will do the amplitude modulation effect directly in JavaScript\n    jsProcessor_ = context_.createJavaScriptNode(NUM_SAMPLES /*bufferSize*/, 1 /*num inputs*/, 1 /*num outputs*/);\n    jsProcessor_.onaudioprocess = processAudio_;\n\n    analyser_ = context_.createAnalyser();\n    analyser_.smoothingTimeConstant = document.getElementById('smoothing').valueAsNumber;\n\n    source_.connect(context_.destination);\n\n    //runCmd('play');\n    document.querySelector(\"[data-func='play']\").disabled = false;\n  };\n\n  this.load = function(url) {\n    var request = new XMLHttpRequest();\n    request.open('GET', url, true);\n    request.responseType = 'arraybuffer';\n    request.onload = function(e) {\n      self_.initAudio(request.response);\n    };\n    request.send();\n  };\n\n  this.play = function() {\n    if (!source_) {\n      sound.load('IO-5.0.wav');\n    } else {\n      // Connect the processing graph:\n      // source -> destination\n      // source -> analyser -> jsProcessor -> destination\n      source_.connect(context_.destination);\n      source_.connect(analyser_);\n\n      analyser_.connect(jsProcessor_);\n      jsProcessor_.connect(context_.destination);\n\n      source_.noteOn(0);\n    }\n  };\n\n  this.stop = function() {\n    source_.noteOff(0);\n    source_.disconnect(0);\n    jsProcessor_.disconnect(0);\n    analyser_.disconnect(0);\n\n    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);\n\n/*\n    meterL.value = 0;\n    meterR.value = 0;\n*/\n\n    antennas[0].style.webkitTransform = 'rotate(-29deg)';\n    antennas[1].style.webkitTransform = 'rotate(30deg)';\n    leftEye.style.webkitTransform = 'none';\n    rightEye.style.webkitTransform = 'none';\n    leftFoot.style.webkitTransform = 'none';\n    rightFoot.style.webkitTransform = 'none';\n    rightArm.style.webkitTransform = 'none';\n\n    yellow.style.webkitTransform = 'none';\n    green.style.webkitTransform = 'none';\n    blue.style.webkitTransform = 'none';\n    red.style.webkitTransform = 'none';\n  };\n}\n\nvar sound = new Sound();\nsound.load('p1474601.mp3');\n</script>\n<script>\n  var _gaq = _gaq || [];\n  _gaq.push(['_setAccount', 'UA-23384572-1']);\n  _gaq.push(['_trackPageview']);\n\n  (function() {\n    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n  })();\n</script>\n</body>\n</html>",
+			"file": "/C/inetpub/wwwroot/audio-visualizer.html",
+			"file_size": 24216,
+			"file_write_time": 129842820102907561,
+			"settings":
+			{
+				"buffer_size": 23281,
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -283,6 +302,7 @@
 	},
 	"file_history":
 	[
+		"/D/projects/douban-worldmap/box2d.js",
 		"/D/projects/extension-reloader/bg.html",
 		"/C/mmseg-3.2.14/src/utils/assert.c",
 		"/D/projects/douban-ban-message/contentscript.js",
@@ -336,7 +356,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -580,46 +600,270 @@
 						],
 						"settings":
 						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
 							"auto_name": "console.log(\"Hello World from user script?\");",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"text-indent": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 0.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": false,
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"Python Django": "python"
+							},
+							"sublimelinter_wrap_find": true,
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false,
 							"word_wrap": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1881.0,
+						"translation.y": 1914.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "box2d.js",
+					"file": "audio-visualizer.html",
 					"settings":
 					{
-						"buffer_size": 176293,
+						"buffer_size": 23285,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4541,
-								0
+								22802,
+								22802
 							]
 						],
 						"settings":
 						{
-							"auto_name": "/* Based on Alex Arnell's inheritance implementati",
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 693.0,
+						"translation.y": 24684.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
+					"file": "beatdetektor.js",
+					"settings":
+					{
+						"buffer_size": 23810,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23278,
+								23278
+							]
+						],
+						"settings":
+						{
+							"auto_name": "/*",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 21272.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/inetpub/wwwroot/audio-visualizer.html",
+					"settings":
+					{
+						"buffer_size": 23281,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								22790,
+								22790
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"text-indent": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 0.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": false,
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"Python Django": "python"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 28327.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
 					"file": "/C/Users/Lemon/Desktop/svg-signature/blank.svg",
 					"settings":
 					{
@@ -729,7 +973,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 7,
 					"file": "raphael-min.js",
 					"settings":
 					{
@@ -839,7 +1083,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 8,
 					"settings":
 					{
 						"buffer_size": 0,
@@ -947,7 +1191,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 9,
 					"file": "world.js",
 					"settings":
 					{
@@ -1057,7 +1301,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 10,
 					"file": "postMessage.js",
 					"settings":
 					{
@@ -1168,7 +1412,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 11,
 					"file": "test.js",
 					"settings":
 					{
@@ -1278,7 +1522,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 12,
 					"file": "Douban.js",
 					"settings":
 					{
@@ -1391,7 +1635,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 13,
 					"file": "worldmap.js",
 					"settings":
 					{
@@ -1503,7 +1747,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 14,
 					"file": "/D/projects/extension-reloader/bg.html",
 					"settings":
 					{
