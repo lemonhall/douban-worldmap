@@ -29,8 +29,8 @@
 var raphaeljs = chrome.extension.getURL("raphael-min.js");
 var worldjs = chrome.extension.getURL("world.js");
 var worldmapjs = chrome.extension.getURL("worldmap.js");
-//var box2djs= chrome.extension.getURL("box2d.js");
-//var userjs= chrome.extension.getURL("user.js");
+var box2djs= chrome.extension.getURL("box2d.js");
+var userjs= chrome.extension.getURL("user.js");
 loadScripts([
     box2djs,
     userjs

@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"bo",
+				"box2djs"
+			],
+			[
 				"li",
 				"list_uin"
 			],
@@ -115,8 +119,26 @@
 			"file": "contentscript.js",
 			"settings":
 			{
-				"buffer_size": 1571,
+				"buffer_size": 1653,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "user.js",
+			"settings":
+			{
+				"buffer_size": 9003,
+				"line_ending": "Windows",
+				"name": "console.log(\"Hello World from user script?\");"
+			}
+		},
+		{
+			"file": "box2d.js",
+			"settings":
+			{
+				"buffer_size": 176293,
+				"line_ending": "Windows",
+				"name": "/* Based on Alex Arnell's inheritance implementati"
 			}
 		},
 		{
@@ -433,15 +455,15 @@
 					"file": "contentscript.js",
 					"settings":
 					{
-						"buffer_size": 1571,
+						"buffer_size": 1653,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1041,
-								1041
+								1092,
+								1092
 							]
 						],
 						"settings":
@@ -535,13 +557,69 @@
 							"word_wrap": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 861.0,
+						"translation.y": 594.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
+					"file": "user.js",
+					"settings":
+					{
+						"buffer_size": 9003,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								546,
+								546
+							]
+						],
+						"settings":
+						{
+							"auto_name": "console.log(\"Hello World from user script?\");",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1881.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "box2d.js",
+					"settings":
+					{
+						"buffer_size": 176293,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4541,
+								0
+							]
+						],
+						"settings":
+						{
+							"auto_name": "/* Based on Alex Arnell's inheritance implementati",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 693.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "/C/Users/Lemon/Desktop/svg-signature/blank.svg",
 					"settings":
 					{
@@ -651,7 +729,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 5,
 					"file": "raphael-min.js",
 					"settings":
 					{
@@ -761,7 +839,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 6,
 					"settings":
 					{
 						"buffer_size": 0,
@@ -869,7 +947,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 7,
 					"file": "world.js",
 					"settings":
 					{
@@ -979,7 +1057,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 8,
 					"file": "postMessage.js",
 					"settings":
 					{
@@ -1090,7 +1168,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 9,
 					"file": "test.js",
 					"settings":
 					{
@@ -1200,7 +1278,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 10,
 					"file": "Douban.js",
 					"settings":
 					{
@@ -1313,7 +1391,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 11,
 					"file": "worldmap.js",
 					"settings":
 					{
@@ -1425,7 +1503,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 12,
 					"file": "/D/projects/extension-reloader/bg.html",
 					"settings":
 					{

@@ -28,11 +28,25 @@ var query, page = 0;
 
 var resultBodies = [];
 
-var gravity = { x: 0, y: 1 };
+var gravity = { x: 0, y: 0.5 };
 
 init();
 
 function init() {
+
+document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+// document.ondblclick = onDocumentDoubleClick;
+
+document.addEventListener( 'keyup', onDocumentKeyUp, false );
+
+
+document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+document.addEventListener( 'touchend', onDocumentTouchEnd, false );
+
+window.addEventListener( 'deviceorientation', onWindowDeviceOrientation, false );
 
 	// init box2d
 
@@ -47,7 +61,7 @@ function init() {
 
 		// Get box2d elements
 
-		elements = getElementsByClass("nav-srh");
+		elements = getElementsByClass("obu");
 
 	for ( var i = 0; i < elements.length; i ++ ) {
 
@@ -84,6 +98,118 @@ function run() {
 	setInterval( loop, 25 );
 
 }
+
+			//
+
+			function onDocumentMouseDown( event ) {
+
+				isMouseDown = true;
+
+			}
+
+			function onDocumentMouseUp( event ) {
+
+				isMouseDown = false;
+
+			}
+
+			function onDocumentMouseMove( event ) {
+
+				if ( !isRunning ) run();
+
+				mouse.x = event.clientX;
+				mouse.y = event.clientY;
+
+			}
+
+			function onDocumentKeyUp( event ) {
+
+				if ( event.keyCode == 13 ) search();
+
+			}
+
+			function onDocumentTouchStart( event ) {
+
+				if ( event.touches.length == 1 ) {
+
+					if ( !isRunning ) {
+
+						run();
+
+					}
+
+					mouse.x = event.touches[0].pageX;
+					mouse.y = event.touches[0].pageY;
+					isMouseDown = true;
+				}
+			}
+
+			function onDocumentTouchMove( event ) {
+
+				if ( event.touches.length == 1 ) {
+
+					event.preventDefault();
+
+					mouse.x = event.touches[0].pageX;
+					mouse.y = event.touches[0].pageY;
+
+				}
+
+			}
+
+			function onDocumentTouchEnd( event ) {
+
+				if ( event.touches.length == 0 ) {
+
+					isMouseDown = false;
+				}
+
+			}
+
+			function onWindowDeviceOrientation( event ) {
+
+				if ( event.beta ) {
+
+					gravity.x = Math.sin( event.gamma * Math.PI / 180 );
+					gravity.y = Math.sin( ( Math.PI / 4 ) + event.beta * Math.PI / 180 );
+
+				}
+
+			}
+
+			//
+
+			function onElementMouseDown( event ) {
+
+				event.preventDefault();
+
+				mouseOnClick[0] = event.clientX;
+				mouseOnClick[1] = event.clientY;
+
+			}
+
+			function onElementMouseUp( event ) {
+
+				event.preventDefault();
+
+			}
+
+			function onElementClick( event ) {
+
+				var range = 5;
+
+				if ( mouseOnClick[0] > event.clientX + range || mouseOnClick[0] < event.clientX - range &&
+				     mouseOnClick[1] > event.clientY + range || mouseOnClick[1] < event.clientY - range ) {
+
+					event.preventDefault();
+
+				}
+
+				if ( event.target == document.getElementById( 'btnG' ) ) search();
+				if ( event.target == document.getElementById( 'btnI' ) ) imFeelingLucky();
+				if ( event.target == document.getElementById( 'q' ) ) document.getElementById('q').focus();
+
+			}
 
 			function loop() {
 
